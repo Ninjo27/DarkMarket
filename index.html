@@ -103,6 +103,7 @@
         <!-- Vùng hiển thị xu góc trên phải -->
         <div id="coinDisplay" style="padding: 10px 20px; color: #eee; font-weight: bold; text-align: right; background: #292929;">
             Xu: <span id="coinAmount">0</span>
+            Xu đang duyệt: <span id="coinPending">0</span>
         </div>
     <div class="content" id="mainContent">
         <h1>Chào mừng bạn đến với DarkMarket!</h1>
@@ -157,7 +158,9 @@
     if (!coinsData) return;
     var coins = JSON.parse(coinsData);
     document.getElementById('coinAmount').textContent = coins.official;
+    document.getElementById('coinPending').textContent = coins.pending;
 }
+
 
 function renderCoins(username) {
     var coinsData = localStorage.getItem('coins_' + username);
