@@ -252,7 +252,7 @@ function duyetXu(name, xuChoDuyet) {
   const confirmDuyet = confirm(`Bạn chắc chắn muốn duyệt ${xuChoDuyet} xu cho ${name}?`);
   if (!confirmDuyet) return;
 
-  fetch("https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbyF1AY_2UZD1dEFHsFiTpoXVJ5qpcPK-3_Hwe4Ny5ly_uBQD2MuCpCapMopnXNAEydPxA/exec/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbyF1AY_2UZD1dEFHsFiTpoXVJ5qpcPK-3_Hwe4Ny5ly_uBQD2MuCpCapMopnXNAEydPxA/exec/exec", {
     method: "POST",
     body: JSON.stringify({
       action: "duyetXu",
