@@ -1,1 +1,55 @@
-
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Đăng ký & Đăng nhập Demo</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    #authSection { max-width: 400px; margin: 30px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px;}
+    input { display: block; width: 95%; margin-bottom: 10px; padding: 8px;}
+    button { padding: 8px 18px; margin-bottom: 8px;}
+    #loggedIn { margin-top: 16px;}
+  </style>
+</head>
+<body>
+  <div id="authSection">
+    <div id="registerForm">
+      <h2>Đăng ký</h2>
+      <input type="text" id="regUsername" placeholder="Tên đăng nhập">
+      <input type="password" id="regPassword" placeholder="Mật khẩu">
+      <button onclick="handleRegister()">Đăng ký</button>
+      <p id="regMsg" style="color:green"></p>
+    </div>
+    <div id="loginForm">
+      <h2>Đăng nhập</h2>
+      <input type="text" id="loginUsername" placeholder="Tên đăng nhập">
+      <input type="password" id="loginPassword" placeholder="Mật khẩu">
+      <button onclick="handleLogin()">Đăng nhập</button>
+      <p id="loginMsg" style="color:green"></p>
+    </div>
+    <div id="loggedIn" style="display:none;">
+      <p>Xin chào, <span id="user"></span>!</p>
+      <button onclick="handleLogout()">Đăng xuất</button>
+    </div>
+  </div>
+  <script>
+    // Đăng ký
+    function register(username, password) {
+      let users = JSON.parse(localStorage.getItem('users') || '{}');
+      if (!username || !password) {
+        return { success: false, message: 'Vui lòng điền đầy đủ thông tin.' };
+      }
+      if (users[username]) {
+        return { success: false, message: 'Tài khoản đã tồn tại.' };
+      }
+      users[username] = password;
+      localStorage.setItem('users', JSON.stringify(users));
+      return { success: true, message: 'Đăng ký thành công.' };
+    }
+    // Đăng nhập
+    function login(username, password) {
+      let users = JSON.parse(localStorage.getItem('users') || '{}');
+      if (users[username] && users[username] === password) {
+        localStorage.setItem('currentUser', username);
+        return { success: true, message: 'Đăng nhập thành công.'
+
