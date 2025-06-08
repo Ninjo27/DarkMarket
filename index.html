@@ -52,4 +52,27 @@
       if (users[username] && users[username] === password) {
         localStorage.setItem('currentUser', username);
         return { success: true, message: 'Đăng nhập thành công.'
-
+<!-- Form đăng nhập (hiển thị mặc định) -->
+<div id="login-form">
+  <h2>Đăng nhập</h2>
+  <!-- Các trường đăng nhập -->
+  <button onclick="showRegister()">Chưa có tài khoản? Đăng ký</button>
+</div>
+
+<!-- Form đăng ký (ẩn mặc định) -->
+<div id="register-form" style="display: none;">
+  <h2>Đăng ký</h2>
+  <!-- Các trường đăng ký -->
+  <button onclick="showLogin()">Đã có tài khoản? Đăng nhập</button>
+</div>
+
+<script>
+function showRegister() {
+  document.getElementById('login-form').style.display = 'none';
+  document.getElementById('register-form').style.display = 'block';
+}
+function showLogin() {
+  document.getElementById('register-form').style.display = 'none';
+  document.getElementById('login-form').style.display = 'block';
+}
+</script>
