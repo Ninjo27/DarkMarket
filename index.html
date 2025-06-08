@@ -162,17 +162,53 @@
             document.getElementById('registerTab').classList.add('active');
         }
     }
-    // Xử lý submit cho 2 form (update mới):
-    document.getElementById('loginForm').onsubmit = function(e) {
-        e.preventDefault();
-        // Ẩn form đăng nhập/đăng ký, hiện giao diện chính
-        document.getElementById('authBox').classList.add('hidden');
-        document.getElementById('mainApp').classList.remove('hidden');
-    };
+
+    // Đăng ký tài khoản
     document.getElementById('registerForm').onsubmit = function(e) {
         e.preventDefault();
-        alert('Đăng ký thành công (demo)');
+        var username = document.getElementById('registerUsername').value;
+        var email = document.getElementById('registerEmail').value;
+        var password = document.getElementById('registerPassword').value;
+        var confirm = document.getElementById('registerConfirm').value;
+
+        if(password !== confirm) {
+            alert('Mật khẩu nhập lại không khớp!');
+            return;
+        }
+
+        // Kiểm tra tài khoản đã tồn tại chưa
+        if(localStorage.getItem('user_' + username)) {
+            alert('Tên đăng nhập đã tồn tại!');
+            return;
+        }
+
+        // Lưu vào localStorage
+        localStorage.setItem('user_' + username, JSON.stringify({email: email, password: password}));
+        alert('Đăng ký thành công!');
         showForm('login');
+    };
+
+    // Đăng nhập
+    document.getElementById('loginForm').onsubmit = function(e) {
+        e.preventDefault();
+        var username = document.getElementById('loginUsername').value;
+        var password = document.getElementById('loginPassword').value;
+        var userData = localStorage.getItem('user_' + username);
+
+        if(!userData) {
+            alert('Tên đăng nhập không tồn tại!');
+            return;
+        }
+
+        var user = JSON.parse(userData);
+        if(user.password !== password) {
+            alert('Mật khẩu không đúng!');
+            return;
+        }
+
+        // Đăng nhập thành công
+        document.getElementById('authBox').classList.add('hidden');
+        document.getElementById('mainApp').classList.remove('hidden');
     };
 </script>
 </body>
