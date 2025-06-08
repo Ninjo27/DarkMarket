@@ -159,38 +159,36 @@
                 case 'quaythuong':
                     mainContent.innerHTML = `<h2>Quay thưởng</h2><p>Hãy thử vận may của bạn với các vòng quay thưởng hấp dẫn!</p>`;
                     break;
-                case "Quản lí":
-  fetch("https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbyF1AY_2UZD1dEFHsFiTpoXVJ5qpcPK-3_Hwe4Ny5ly_uBQD2MuCpCapMopnXNAEydPxA/exec/exec")
-    .then((res) => res.json())
-    .then((data) => {
-      if (!Array.isArray(data)) {
-        document.getElementById("app").innerHTML = "Không có dữ liệu.";
-        return;
-      }
+                case "quanli":
+    fetch("https://script.google.com/macros/s/AKfycbyF1AY_2UZD1dEFHsFiTpoXVJ5qpcPK-3_Hwe4Ny5ly_uBQD2MuCpCapMopnXNAEydPxA/exec")
+        .then((res) => res.json())
+        .then((data) => {
+            if (!Array.isArray(data)) {
+                mainContent.innerHTML = "Không có dữ liệu.";
+                return;
+            }
 
-      let html = `<h2>Danh sách người chơi</h2>`;
-      html += `<table border="1" cellpadding="5" style="width:100%; text-align:left;">
-                <tr><th>Tên</th><th>Xu</th><th>Xu chờ duyệt</th><th>Duyệt</th></tr>`;
+            let html = `<h2>Danh sách người chơi</h2>`;
+            html += `<table border="1" cellpadding="5" style="width:100%; text-align:left;">
+                      <tr><th>Tên</th><th>Xu</th><th>Xu chờ duyệt</th><th>Duyệt</th></tr>`;
 
-      data.forEach((player) => {
-        html += `<tr>
-          <td>${player.name}</td>
-          <td>${player.xu}</td>
-          <td>${player.xuChoDuyet}</td>
-          <td>
-            <button onclick="duyetXu('${player.name}', ${player.xuChoDuyet})">Duyệt</button>
-          </td>
-        </tr>`;
-      });
+            data.forEach((player) => {
+                html += `<tr>
+                  <td>${player.name}</td>
+                  <td>${player.xu}</td>
+                  <td>${player.xuChoDuyet}</td>
+                  <td><button onclick="duyetXu('${player.name}', ${player.xuChoDuyet})">Duyệt</button></td>
+                </tr>`;
+            });
 
-      html += `</table>`;
-      document.getElementById("app").innerHTML = html;
-    })
-    .catch((err) => {
-      console.error(err);
-      document.getElementById("app").innerHTML = "Lỗi khi tải dữ liệu.";
-    });
-  break;
+            html += `</table>`;
+            mainContent.innerHTML = html;
+        })
+        .catch((err) => {
+            console.error(err);
+            mainContent.innerHTML = "Lỗi khi tải dữ liệu.";
+        });
+    break;
 
 
                 default:
