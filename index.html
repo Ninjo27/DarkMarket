@@ -98,9 +98,14 @@
         </div>
         <button type="submit" class="btn">Đăng ký</button>
     </form>
-    <div class="main-container hidden" id="mainSection">
+<!-- Giao diện chính, ẩn mặc định -->
+<div class="main-container hidden" id="mainSection">
   <div class="sidebar">
     <h2>DarkMarket</h2>
+    <div class="xu-info" id="xuInfo">
+      <div>Xu: <span id="xuAmount">0</span></div>
+      <div>Đang chờ duyệt: <span id="pendingXu">0</span></div>
+    </div>
     <ul class="menu" id="menuList">
       <li data-content="nhanxu">Nhận xu</li>
       <li data-content="muahang">Mua hàng</li>
@@ -112,26 +117,8 @@
     <h1>Chào mừng bạn đến với DarkMarket!</h1>
     <p>Chọn một danh mục ở cột bên trái để bắt đầu.</p>
   </div>
-</div>
-<div class="sidebar">
-  <h2>DarkMarket</h2>
-  <div class="xu-info" id="xuInfo">
-    <div>Xu: <span id="xuAmount">0</span></div>
-    <div>Đang chờ duyệt: <span id="pendingXu">0</span></div>
-  </div>
-  <ul class="menu" id="menuList">
-    <!-- ... -->
-  </ul>
-</div><div class="sidebar">
-  <h2>DarkMarket</h2>
-  <div class="xu-info" id="xuInfo">
-    <div>Xu: <span id="xuAmount">0</span></div>
-    <div>Đang chờ duyệt: <span id="pendingXu">0</span></div>
-  </div>
-  <ul class="menu" id="menuList">
-    <!-- ... -->
-  </ul>
-</div>
+</div>  
+
 <script>
   // Giả lập tên người dùng (khi thực tế hãy lấy thông tin này từ server/session)
   var username = 'Ninjo27'; // Đổi thành biến động nếu tích hợp thật
