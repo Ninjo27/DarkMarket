@@ -132,18 +132,24 @@
             switch (e.target.getAttribute('data-content')) {
                 case 'nhanxu':
     mainContent.innerHTML = `
-    <h2>Nhận xu</h2>
-    <p>Tại đây bạn có thể nhận thưởng xu miễn phí bằng cách xem quảng cáo.</p>
-    <div style="margin-top: 20px;">
-        <p><strong>Xu chính thức:</strong> <span id="xu">${getCoins().official}</span></p>
-        <p><strong>Xu đang duyệt:</strong> <span id="xuDangDuyet">${getCoins().pending}</span></p
-        <button id="xemQuangCaoBtn" class="btn" style="margin-top:10px; background: #28a745;">Xem quảng cáo</button>
+        <h2>Nhận xu</h2>
+        <p>Tại đây bạn có thể nhận thưởng xu miễn phí bằng cách xem quảng cáo.</p>
+        <div style="margin-top: 20px;">
+            <p><strong>Xu chính thức:</strong> <span id="xu">${getCoins().official}</span></p>
+            <p><strong>Xu đang duyệt:</strong> <span id="xuDangDuyet">${getCoins().pending}</span></p>
+            <button id="xemQuangCaoBtn" class="btn" style="margin-top:10px; background: #28a745;">Xem quảng cáo</button>
         </div>
     `;
 
-    document.getElementById('watchAdBtn').onclick = function() {
+    document.getElementById('xemQuangCaoBtn').onclick = function() {
+        // Mở link quảng cáo ở tab mới
+        window.open('https://favourableafter.com/g3pai1n4es?key=8d320218365b0776d642f439bd9f6540', '_blank'); // ← Đổi thành link quảng cáo của bạn
+
+        // Cộng xu đang duyệt
         watchAdAndAddCoin();
     };
+    break;
+
 
 
 
