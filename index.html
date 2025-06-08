@@ -1,78 +1,175 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Đăng ký & Đăng nhập Demo</title>
-  <style>
-    body { font-family: Arial, sans-serif; }
-    #authSection { max-width: 400px; margin: 30px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px;}
-    input { display: block; width: 95%; margin-bottom: 10px; padding: 8px;}
-    button { padding: 8px 18px; margin-bottom: 8px;}
-    #loggedIn { margin-top: 16px;}
-  </style>
+    <meta charset="UTF-8">
+<title>DarkMarket - Giao diện chính</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #222; color: #fff; }
+        .container { width: 350px; margin: 80px auto; background: #333; padding: 30px 20px; border-radius: 10px; box-shadow: 0 0 10px #000a; }
+        .tabs { display: flex; }
+        .tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            background: #222;
+            border-radius: 5px 5px 0 0;
+            margin-right: 2px;
+        }
+        .tab.active { background: #444; font-weight: bold; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; }
+        .form-group input {
+            width: 100%; padding: 8px; border: none; border-radius: 4px;
+        }
+        .btn {
+            width: 100%; padding: 10px; background: #007bff; color: #fff; border: none; border-radius: 4px;
+            font-size: 16px; cursor: pointer;
+        }
+        .btn:hover { background: #0056b3; }
+        .hidden { display: none; }
+          body { margin:0; font-family: Arial, sans-serif; background: #222; color: #eee; }
+    .main-container { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 220px; background: #181818; padding: 30px 0 0 0;
+      display: flex; flex-direction: column; min-height: 100vh; box-shadow: 2px 0 8px #000a;
+    }
+    .sidebar h2 { color: #fff; text-align: center; margin-bottom: 32px; }
+    .menu {
+      list-style: none; padding: 0; margin: 0;
+      flex: 1;
+    }
+    .menu li {
+      padding: 15px 32px; cursor: pointer; transition: background 0.2s;
+      font-size: 18px; color: #ccc;
+    }
+    .menu li:hover, .menu li.active { background: #333; color: #fff; }
+    .content {
+      flex: 1; padding: 40px; background: #292929;
+    }
+    .hidden { display: none; }
+    </style>
 </head>
 <body>
-  <div id="authSection">
-    <div id="registerForm">
-      <h2>Đăng ký</h2>
-      <input type="text" id="regUsername" placeholder="Tên đăng nhập">
-      <input type="password" id="regPassword" placeholder="Mật khẩu">
-      <button onclick="handleRegister()">Đăng ký</button>
-      <p id="regMsg" style="color:green"></p>
+<div class="container">
+    <div class="tabs">
+        <div class="tab active" id="loginTab" onclick="showForm('login')">Đăng nhập</div>
+        <div class="tab" id="registerTab" onclick="showForm('register')">Đăng ký</div>
     </div>
-    <div id="loginForm">
-      <h2>Đăng nhập</h2>
-      <input type="text" id="loginUsername" placeholder="Tên đăng nhập">
-      <input type="password" id="loginPassword" placeholder="Mật khẩu">
-      <button onclick="handleLogin()">Đăng nhập</button>
-      <p id="loginMsg" style="color:green"></p>
-    </div>
-    <div id="loggedIn" style="display:none;">
-      <p>Xin chào, <span id="user"></span>!</p>
-      <button onclick="handleLogout()">Đăng xuất</button>
-    </div>
+    <!-- Form Đăng nhập -->
+    <form id="loginForm">
+        <div class="form-group">
+            <label for="loginUsername">Tên đăng nhập</label>
+            <input type="text" id="loginUsername" name="loginUsername" required>
+        </div>
+        <div class="form-group">
+            <label for="loginPassword">Mật khẩu</label>
+            <input type="password" id="loginPassword" name="loginPassword" required>
+        </div>
+        <button type="submit" class="btn">Đăng nhập</button>
+    </form>
+    <!-- Form Đăng ký -->
+    <form id="registerForm" class="hidden">
+        <div class="form-group">
+            <label for="registerUsername">Tên đăng nhập</label>
+            <input type="text" id="registerUsername" name="registerUsername" required>
+        </div>
+        <div class="form-group">
+            <label for="registerEmail">Email</label>
+            <input type="email" id="registerEmail" name="registerEmail" required>
+        </div>
+        <div class="form-group">
+            <label for="registerPassword">Mật khẩu</label>
+            <input type="password" id="registerPassword" name="registerPassword" required>
+        </div>
+        <div class="form-group">
+            <label for="registerConfirm">Nhập lại mật khẩu</label>
+            <input type="password" id="registerConfirm" name="registerConfirm" required>
+        </div>
+        <button type="submit" class="btn">Đăng ký</button>
+    </form>
+  <div class="main-container">
+  <div class="sidebar">
+    <h2>DarkMarket</h2>
+    <ul class="menu" id="menuList">
+      <li data-content="nhanxu">Nhận xu</li>
+      <li data-content="muahang">Mua hàng</li>
+      <li data-content="quaythuong">Quay thưởng</li>
+      <li data-content="quanli" id="adminMenu" class="hidden">Quản lí</li>
+    </ul>
   </div>
-  <script>
-    // Đăng ký
-    function register(username, password) {
-      let users = JSON.parse(localStorage.getItem('users') || '{}');
-      if (!username || !password) {
-        return { success: false, message: 'Vui lòng điền đầy đủ thông tin.' };
-      }
-      if (users[username]) {
-        return { success: false, message: 'Tài khoản đã tồn tại.' };
-      }
-      users[username] = password;
-      localStorage.setItem('users', JSON.stringify(users));
-      return { success: true, message: 'Đăng ký thành công.' };
-    }
-    // Đăng nhập
-    function login(username, password) {
-      let users = JSON.parse(localStorage.getItem('users') || '{}');
-      if (users[username] && users[username] === password) {
-        localStorage.setItem('currentUser', username);
-        return { success: true, message: 'Đăng nhập thành công.'
-<!-- Form đăng nhập (hiển thị mặc định) -->
-<div id="login-form">
-  <h2>Đăng nhập</h2>
-  <!-- Các trường đăng nhập -->
-  <button onclick="showRegister()">Chưa có tài khoản? Đăng ký</button>
-</div>
-
-<!-- Form đăng ký (ẩn mặc định) -->
-<div id="register-form" style="display: none;">
-  <h2>Đăng ký</h2>
-  <!-- Các trường đăng ký -->
-  <button onclick="showLogin()">Đã có tài khoản? Đăng nhập</button>
+  <div class="content" id="mainContent">
+    <h1>Chào mừng bạn đến với DarkMarket!</h1>
+    <p>Chọn một danh mục ở cột bên trái để bắt đầu.</p>
+  </div>
 </div>
 
 <script>
-function showRegister() {
-  document.getElementById('login-form').style.display = 'none';
-  document.getElementById('register-form').style.display = 'block';
-}
-function showLogin() {
-  document.getElementById('register-form').style.display = 'none';
-  document.getElementById('login-form').style.display = 'block';
-}
+  // Giả lập tên người dùng (khi thực tế hãy lấy thông tin này từ server/session)
+  var username = 'Ninjo27'; // Đổi thành biến động nếu tích hợp thật
+
+  // Hiện menu "Quản lí" nếu là admin
+  if (username === 'Ninjo27') {
+    document.getElementById('adminMenu').classList.remove('hidden');
+  }
+
+  // Xử lý chuyển tab
+  const menuList = document.getElementById('menuList');
+  const mainContent = document.getElementById('mainContent');
+  menuList.addEventListener('click', function(e) {
+    if (e.target.tagName === 'LI') {
+      // Đổi active
+      [...menuList.children].forEach(li => li.classList.remove('active'));
+      e.target.classList.add('active');
+      // Hiển thị nội dung tương ứng
+      switch (e.target.getAttribute('data-content')) {
+        case 'nhanxu':
+          mainContent.innerHTML = `<h2>Nhận xu</h2><p>Tại đây bạn có thể nhận thưởng xu miễn phí hoặc nạp thêm xu vào tài khoản.</p>`;
+          break;
+        case 'muahang':
+          mainContent.innerHTML = `<h2>Mua hàng</h2><p>Danh sách các sản phẩm/dịch vụ có thể mua bằng xu sẽ hiển thị tại đây.</p>`;
+          break;
+        case 'quaythuong':
+          mainContent.innerHTML = `<h2>Quay thưởng</h2><p>Hãy thử vận may của bạn với các vòng quay thưởng hấp dẫn!</p>`;
+          break;
+        case 'quanli':
+          mainContent.innerHTML = `<h2>Quản lí hệ thống</h2>
+            <ul>
+              <li>Quản lí người dùng</li>
+              <li>Quản lí sản phẩm</li>
+              <li>Thống kê giao dịch</li>
+              <li>...</li>
+            </ul>`;
+          break;
+        default:
+          mainContent.innerHTML = `<h1>Chào mừng bạn đến với DarkMarket!</h1><p>Chọn một danh mục ở cột bên trái để bắt đầu.</p>`;
+      }
+    }
+  });
+</div>
+<script>
+    function showForm(form) {
+        document.getElementById('loginForm').classList.add('hidden');
+        document.getElementById('registerForm').classList.add('hidden');
+        document.getElementById('loginTab').classList.remove('active');
+        document.getElementById('registerTab').classList.remove('active');
+        if (form === 'login') {
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('loginTab').classList.add('active');
+        } else {
+            document.getElementById('registerForm').classList.remove('hidden');
+            document.getElementById('registerTab').classList.add('active');
+        }
+    }
+    // Xử lý submit cho 2 form (chỉ demo, bạn cần thay bằng xử lý thực tế)
+    document.getElementById('loginForm').onsubmit = function(e) {
+        e.preventDefault();
+        alert('Đăng nhập thành công (demo)');
+    };
+    document.getElementById('registerForm').onsubmit = function(e) {
+        e.preventDefault();
+        alert('Đăng ký thành công (demo)');
+    };
 </script>
+</body>
+</html>
