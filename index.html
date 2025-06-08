@@ -289,84 +289,38 @@ function duyetXu(name, xuChoDuyet) {
         }
     }
 
-    // Đăng ký tài khoản
-    document.getElementById('registerForm').onsubmit = function(e) {
-        e.preventDefault();
-        var username = document.getElementById('registerUsername').value;
-        var email = document.getElementById('registerEmail').value;
-        var password = document.getElementById('registerPassword').value;
-        var confirm = document.getElementById('registerConfirm').value;
+    // Thay bằng link Google Apps Script của bạn:
+      const scriptURL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
 
-        if (password !== confirm) {
-            alert('Mật khẩu nhập lại không khớp!');
-            return;
-        }
-
-        if (localStorage.getItem('user_' + username)) {
-            alert('Tên đăng nhập đã tồn tại!');
-            return;
-        }
-
-        localStorage.setItem('user_' + username, JSON.stringify({ email: email, password: password }));
-        alert('Đăng ký thành công!');
-        showForm('login');
-    };
-
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyF1AY_2UZD1dEFHsFiTpoXVJ5qpcPK-3_Hwe4Ny5ly_uBQD2MuCpCapMopnXNAEydPxA/exec'; // thay bằng URL thật
-
-function handleLogin() {
-  const username = document.getElementById("login-username").value;
-  const password = document.getElementById("login-password").value;
-
-  fetch(`${scriptURL}?action=login&username=${username}&password=${password}`)
-    .then(res => res.json())
-    .then(data => {
-      if (data.status === "OK") {
-        localStorage.setItem("username", username);
-        document.getElementById("coins").textContent = data.coins;
-        document.getElementById("pending").textContent = data.pending;
-        alert("Đăng nhập thành công!");
-      } else {
-        alert("Sai tài khoản hoặc mật khẩu!");
-      }
-    });
-}
-
-function updateBalanceDisplay() {
-  const username = localStorage.getItem("username");
-  if (!username) return;
-
-  fetch(`${scriptURL}?action=get_user&username=${username}`)
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById("coins").textContent = data.coins;
-      document.getElementById("pending").textContent = data.pending;
-    });
-}
-
-// Khởi tạo dữ liệu xu nếu chưa có
-if (!localStorage.getItem('coins_' + username)) {
-    localStorage.setItem('coins_' + username, JSON.stringify({ official: 0, pending: 0 }));
-}
-
-        // Đăng nhập thành công
-        document.getElementById('authBox').classList.add('hidden');
-        document.getElementById('mainApp').classList.remove('hidden');
-
-        // Hiện menu "Quản lí" nếu user là admin
-        if (username === 'Ninjo27') {
-            document.getElementById('adminMenu').classList.remove('hidden');
-        } else {
-            document.getElementById('adminMenu').classList.add('hidden');
-        }
-    };
-     renderCoins(username); // <-- Thêm dòng này để cập nhật giao diện
+      fetch(scriptURL)
+        .then(res => res.json())
+        .then(data => {
+          const user = data.find(
+            u => u.name === username && u.password === password
+          );
+          if (user) {
+            alert("Đăng nhập thành công!");
+            localStorage.setItem("currentUser", username);
+            document.getElementById("authBox").classList.add("hidden");
+            document.getElementById("mainApp").classList.remove("hidden");
+            // Gọi hàm load giao diện chính nếu có
+          } else {
+            alert("Sai tên đăng nhập hoặc mật khẩu.");
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          alert("Lỗi khi kết nối Google Sheets.");
+        });
+    renderCoins(username); // <-- Thêm dòng này để cập nhật giao diện
     // Khởi tạo dữ liệu xu nếu chưa có
 if (!localStorage.getItem('coins_' + username)) {
     localStorage.setItem('coins_' + username, JSON.stringify({ official: 0, pending: 0 }));
 }
 // Hiển thị số xu ở góc trên phải
 updateCoinDisplay(username);
-</script>
+    });
+  </script>
 </body>
 </html>
+    
