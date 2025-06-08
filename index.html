@@ -133,7 +133,7 @@
                 case 'nhanxu':
     mainContent.innerHTML = `
     <h2>Nhận xu</h2>
-    <p>Tại đây bạn có thể nhận thưởng xu miễn phí hoặc nạp thêm xu vào tài khoản.</p>
+    <p>Tại đây bạn có thể nhận thưởng xu miễn phí bằng cách xem quảng cáo.</p>
     <div style="margin-top: 20px;">
         <p><strong>Xu chính thức:</strong> <span id="xu">${getCoins().official}</span></p>
         <p><strong>Xu đang duyệt:</strong> <span id="xuDangDuyet">${getCoins().pending}</span></p
@@ -145,22 +145,7 @@
         watchAdAndAddCoin();
     };
 
-    document.getElementById('nhanXuBtn').onclick = function() {
-        var coins = getCoins();
-        if (coins.pending > 0) {
-            coins.official += coins.pending;
-            coins.pending = 0;
-            saveCoins(coins);
-            alert('Bạn đã nhận xu thành công!');
-            // Cập nhật lại UI
-            document.getElementById('xu').textContent = coins.official;
-            document.getElementById('xuDangDuyet').textContent = coins.pending;
-            updateCoinDisplay(username);
-        } else {
-            alert('Bạn không có xu đang duyệt để nhận!');
-        }
-    };
-    break;
+
 
                 case 'muahang':
                     mainContent.innerHTML = `<h2>Mua hàng</h2><p>Danh sách các sản phẩm/dịch vụ có thể mua bằng xu sẽ hiển thị tại đây.</p>`;
