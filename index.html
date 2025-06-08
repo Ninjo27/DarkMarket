@@ -51,7 +51,7 @@
     </style>
 </head>
 <body>
-<div class="container">
+ <div class="container" id="authSection">
     <div class="tabs">
         <div class="tab active" id="loginTab" onclick="showForm('login')">Đăng nhập</div>
         <div class="tab" id="registerTab" onclick="showForm('register')">Đăng ký</div>
@@ -88,7 +88,7 @@
         </div>
         <button type="submit" class="btn">Đăng ký</button>
     </form>
-  <div class="main-container">
+    <div class="main-container hidden" id="mainSection">
   <div class="sidebar">
     <h2>DarkMarket</h2>
     <ul class="menu" id="menuList">
@@ -162,10 +162,20 @@
         }
     }
     // Xử lý submit cho 2 form (chỉ demo, bạn cần thay bằng xử lý thực tế)
-    document.getElementById('loginForm').onsubmit = function(e) {
-        e.preventDefault();
-        alert('Đăng nhập thành công (demo)');
-    };
+ document.getElementById('loginForm').onsubmit = function(e) {
+ e.preventDefault();
+ // Lấy tên đăng nhập
+   var username = document.getElementById('loginUsername').value.trim();
+ // Ẩn khu vực đăng nhập/đăng ký, hiện giao diện chính
+         document.getElementById('authSection').classList.add('hidden');
+         document.getElementById('mainSection').classList.remove('hidden');
+         // Hiện menu Quản lí nếu tên đăng nhập là Ninjo27
+         if (username === 'Ninjo27') {
+             document.getElementById('adminMenu').classList.remove('hidden');
+         } else {
+             document.getElementById('adminMenu').classList.add('hidden');
+         }
+     };
     document.getElementById('registerForm').onsubmit = function(e) {
         e.preventDefault();
         alert('Đăng ký thành công (demo)');
