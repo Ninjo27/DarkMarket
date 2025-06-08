@@ -132,15 +132,14 @@
             switch (e.target.getAttribute('data-content')) {
                 case 'nhanxu':
     mainContent.innerHTML = `
-        <h2>Nhận xu</h2>
-        <p>Tại đây bạn có thể nhận thưởng xu miễn phí hoặc nạp thêm xu vào tài khoản.</p>
-        <button id="watchAdBtn" class="btn">Xem quảng cáo nhận 1 xu</button>
-        <div style="margin-top: 20px;">
-            <p><strong>Xu chính thức:</strong> <span id="xu">${getCoins().official}</span></p>
-            <p><strong>Xu đang duyệt:</strong> <span id="xuDangDuyet">${getCoins().pending}</span></p>
-    <button id="nhanXuBtn" class="btn">Nhận xu đang duyệt</button>
-    <button id="xemQuangCaoBtn" class="btn" style="margin-top:10px; background: #28a745;">Xem quảng cáo</button>
-`;
+    <h2>Nhận xu</h2>
+    <p>Tại đây bạn có thể nhận thưởng xu miễn phí hoặc nạp thêm xu vào tài khoản.</p>
+    <button id="watchAdBtn" class="btn">Xem quảng cáo nhận 1 xu</button>
+    <div style="margin-top: 20px;">
+        <p><strong>Xu chính thức:</strong> <span id="xu">${getCoins().official}</span></p>
+        <p><strong>Xu đang duyệt:</strong> <span id="xuDangDuyet">${getCoins().pending}</span></p>
+        <button id="nhanXuBtn" class="btn">Nhận xu đang duyệt</button>
+        <button id="xemQuangCaoBtn" class="btn" style="margin-top:10px; background: #28a745;">Xem quảng cáo</button>
         </div>
     `;
 
@@ -193,6 +192,14 @@
     document.getElementById('coinPending').textContent = coins.pending;
 }
 
+function watchAdAndAddCoin() {
+    var coins = getCoins();
+    coins.pending += 1;  // Thêm 1 xu đang duyệt
+    saveCoins(coins);
+    updateCoinDisplay(username);
+    alert('Bạn đã nhận được 1 xu đang duyệt sau khi xem quảng cáo!');
+    renderCoins(username);
+}
 
 function renderCoins(username) {
     var coinsData = localStorage.getItem('coins_' + username);
@@ -215,6 +222,15 @@ function renderCoins(username) {
     alert('Bạn đã nhận được 10 xu đang duyệt sau khi xem quảng cáo!');
 };
 
+}
+function getCoins() {
+    var coinsData = localStorage.getItem('coins_' + username);
+    if (!coinsData) return { official: 0, pending: 0 };
+    return JSON.parse(coinsData);
+}
+
+function saveCoins(coins) {
+    localStorage.setItem('coins_' + username, JSON.stringify(coins));
 }
 
     // Chuyển tab Đăng nhập / Đăng ký
@@ -288,6 +304,7 @@ if (!localStorage.getItem('coins_' + username)) {
             document.getElementById('adminMenu').classList.add('hidden');
         }
     };
+     renderCoins(username); // <-- Thêm dòng này để cập nhật giao diện
     // Khởi tạo dữ liệu xu nếu chưa có
 if (!localStorage.getItem('coins_' + username)) {
     localStorage.setItem('coins_' + username, JSON.stringify({ official: 0, pending: 0 }));
