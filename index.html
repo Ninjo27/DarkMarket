@@ -49,6 +49,16 @@
     }
     .hidden { display: none; }
     </style>
+    .xu-info {
+  background: #292929;
+  padding: 12px 16px;
+  margin: 0 0 16px 0;
+  border-radius: 6px;
+  color: #ffe066;
+  font-size: 17px;
+  box-shadow: 0 1px 4px #0005;
+}
+.xu-info div { margin: 2px 0; }
 </head>
 <body>
  <div class="container" id="authSection">
@@ -103,7 +113,25 @@
     <p>Chọn một danh mục ở cột bên trái để bắt đầu.</p>
   </div>
 </div>
-
+<div class="sidebar">
+  <h2>DarkMarket</h2>
+  <div class="xu-info" id="xuInfo">
+    <div>Xu: <span id="xuAmount">0</span></div>
+    <div>Đang chờ duyệt: <span id="pendingXu">0</span></div>
+  </div>
+  <ul class="menu" id="menuList">
+    <!-- ... -->
+  </ul>
+</div><div class="sidebar">
+  <h2>DarkMarket</h2>
+  <div class="xu-info" id="xuInfo">
+    <div>Xu: <span id="xuAmount">0</span></div>
+    <div>Đang chờ duyệt: <span id="pendingXu">0</span></div>
+  </div>
+  <ul class="menu" id="menuList">
+    <!-- ... -->
+  </ul>
+</div>
 <script>
   // Giả lập tên người dùng (khi thực tế hãy lấy thông tin này từ server/session)
   var username = 'Ninjo27'; // Đổi thành biến động nếu tích hợp thật
@@ -177,9 +205,22 @@
          }
      };
     document.getElementById('registerForm').onsubmit = function(e) {
-        e.preventDefault();
-        alert('Đăng ký thành công (demo)');
-    };
+    e.preventDefault();
+    // Lấy username vừa đăng ký
+    var username = document.getElementById('registerUsername').value.trim();
+    // Ẩn khu vực đăng nhập/đăng ký, hiện giao diện chính
+    document.getElementById('authSection').classList.add('hidden');
+    document.getElementById('mainSection').classList.remove('hidden');
+    // Hiện menu Quản lí nếu tên đăng nhập là Ninjo27
+    if (username === 'Ninjo27') {
+        document.getElementById('adminMenu').classList.remove('hidden');
+    } else {
+        document.getElementById('adminMenu').classList.add('hidden');
+    }
+    // Gán xu mặc định cho tài khoản mới là 0
+    document.getElementById('xuAmount').textContent = 0;
+    document.getElementById('pendingXu').textContent = 0;
+};
 </script>
 </body>
 </html>
