@@ -147,6 +147,30 @@
             }
         }
     });
+function renderCoins(username) {
+    var coinsData = localStorage.getItem('coins_' + username);
+    if (!coinsData) return;
+    var coins = JSON.parse(coinsData);
+
+    document.getElementById('mainContent').innerHTML = `
+        <h2>Thông tin tài khoản</h2>
+        <p><strong>Xu chính thức:</strong> <span id="xu">${coins.official}</span></p>
+        <p><strong>Xu đang duyệt:</strong> <span id="xuDangDuyet">${coins.pending}</span></p>
+        <button id="nhanXuBtn" class="btn">Nhận xu đang duyệt</button>
+    `;
+
+    document.getElementById('nhanXuBtn').onclick = function() {
+        if (coins.pending > 0) {
+            coins.official += coins.pending;
+            coins.pending = 0;
+            localStorage.setItem('coins_' + username, JSON.stringify(coins));
+            renderCoins(username);
+            alert('Bạn đã nhận xu thành công!');
+        } else {
+            alert('Bạn không có xu đang duyệt để nhận!');
+        }
+    };
+}
 
     // Chuyển tab Đăng nhập / Đăng ký
     function showForm(form) {
@@ -203,6 +227,10 @@
             alert('Mật khẩu không đúng!');
             return;
         }
+// Khởi tạo dữ liệu xu nếu chưa có
+if (!localStorage.getItem('coins_' + username)) {
+    localStorage.setItem('coins_' + username, JSON.stringify({ official: 0, pending: 0 }));
+}
 
         // Đăng nhập thành công
         document.getElementById('authBox').classList.add('hidden');
@@ -215,6 +243,11 @@
             document.getElementById('adminMenu').classList.add('hidden');
         }
     };
+    // Khởi tạo dữ liệu xu nếu chưa có
+if (!localStorage.getItem('coins_' + username)) {
+    localStorage.setItem('coins_' + username, JSON.stringify({ official: 0, pending: 0 }));
+}
+
 </script>
 </body>
 </html>
