@@ -159,38 +159,15 @@
                 case 'quaythuong':
                     mainContent.innerHTML = `<h2>Quay thưởng</h2><p>Hãy thử vận may của bạn với các vòng quay thưởng hấp dẫn!</p>`;
                     break;
-                case "quanli":
-    fetch("https://script.google.com/macros/s/AKfycbyF1AY_2UZD1dEFHsFiTpoXVJ5qpcPK-3_Hwe4Ny5ly_uBQD2MuCpCapMopnXNAEydPxA/exec")
-        .then((res) => res.json())
-        .then((data) => {
-            if (!Array.isArray(data)) {
-                mainContent.innerHTML = "Không có dữ liệu.";
-                return;
-            }
-
-            let html = `<h2>Danh sách người chơi</h2>`;
-            html += `<table border="1" cellpadding="5" style="width:100%; text-align:left;">
-                      <tr><th>Tên</th><th>Xu</th><th>Xu chờ duyệt</th><th>Duyệt</th></tr>`;
-
-            data.forEach((player) => {
-                html += `<tr>
-                  <td>${player.name}</td>
-                  <td>${player.xu}</td>
-                  <td>${player.xuChoDuyet}</td>
-                  <td><button onclick="duyetXu('${player.name}', ${player.xuChoDuyet})">Duyệt</button></td>
-                </tr>`;
-            });
-
-            html += `</table>`;
-            mainContent.innerHTML = html;
-        })
-        .catch((err) => {
-            console.error(err);
-            mainContent.innerHTML = "Lỗi khi tải dữ liệu.";
-        });
-    break;
-
-
+                case 'quanli':
+                    mainContent.innerHTML = `<h2>Quản lí hệ thống</h2>
+                        <ul>
+                          <li>Quản lí người dùng</li>
+                          <li>Quản lí sản phẩm</li>
+                          <li>Thống kê giao dịch</li>
+                          <li>...</li>
+                        </ul>`;
+                    break;
                 default:
                     mainContent.innerHTML = `<h1>Chào mừng bạn đến với DarkMarket!</h1><p>Chọn một danh mục ở cột bên trái để bắt đầu.</p>`;
             }
@@ -243,36 +220,6 @@ function getCoins() {
 function saveCoins(coins) {
     localStorage.setItem('coins_' + username, JSON.stringify(coins));
 }
-function duyetXu(name, xuChoDuyet) {
-  if (xuChoDuyet <= 0) {
-    alert("Không có xu để duyệt!");
-    return;
-  }
-
-  const confirmDuyet = confirm(`Bạn chắc chắn muốn duyệt ${xuChoDuyet} xu cho ${name}?`);
-  if (!confirmDuyet) return;
-
-  fetch("https://script.google.com/macros/s/AKfycbyF1AY_2UZD1dEFHsFiTpoXVJ5qpcPK-3_Hwe4Ny5ly_uBQD2MuCpCapMopnXNAEydPxA/exec/exec", {
-    method: "POST",
-    body: JSON.stringify({
-      action: "duyetXu",
-      name: name,
-      amount: xuChoDuyet,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then((res) => res.text())
-    .then((msg) => {
-      alert(msg);
-      chuyenTrang("Quản lí"); // Refresh lại trang quản lý
-    })
-    .catch((err) => {
-      console.error(err);
-      alert("Lỗi khi duyệt xu!");
-    });
-}
 
     // Chuyển tab Đăng nhập / Đăng ký
     function showForm(form) {
@@ -289,38 +236,69 @@ function duyetXu(name, xuChoDuyet) {
         }
     }
 
-    // Thay bằng link Google Apps Script của bạn:
-      const scriptURL = "https://script.google.com/macros/s/AKfycbyF1AY_2UZD1dEFHsFiTpoXVJ5qpcPK-3_Hwe4Ny5ly_uBQD2MuCpCapMopnXNAEydPxA/exec";
+    // Đăng ký tài khoản
+    document.getElementById('registerForm').onsubmit = function(e) {
+        e.preventDefault();
+        var username = document.getElementById('registerUsername').value;
+        var email = document.getElementById('registerEmail').value;
+        var password = document.getElementById('registerPassword').value;
+        var confirm = document.getElementById('registerConfirm').value;
 
-      fetch(scriptURL)
-        .then(res => res.json())
-        .then(data => {
-          const user = data.find(
-            u => u.name === username && u.password === password
-          );
-          if (user) {
-            alert("Đăng nhập thành công!");
-            localStorage.setItem("currentUser", username);
-            document.getElementById("authBox").classList.add("hidden");
-            document.getElementById("mainApp").classList.remove("hidden");
-            // Gọi hàm load giao diện chính nếu có
-          } else {
-            alert("Sai tên đăng nhập hoặc mật khẩu.");
-          }
-        })
-        .catch(err => {
-          console.error(err);
-          alert("Lỗi khi kết nối Google Sheets.");
-        });
-    renderCoins(username); // <-- Thêm dòng này để cập nhật giao diện
+        if (password !== confirm) {
+            alert('Mật khẩu nhập lại không khớp!');
+            return;
+        }
+
+        if (localStorage.getItem('user_' + username)) {
+            alert('Tên đăng nhập đã tồn tại!');
+            return;
+        }
+
+        localStorage.setItem('user_' + username, JSON.stringify({ email: email, password: password }));
+        alert('Đăng ký thành công!');
+        showForm('login');
+    };
+
+    // Đăng nhập
+    document.getElementById('loginForm').onsubmit = function(e) {
+        e.preventDefault();
+        var username = document.getElementById('loginUsername').value;
+        var password = document.getElementById('loginPassword').value;
+        var userData = localStorage.getItem('user_' + username);
+
+        if (!userData) {
+            alert('Tên đăng nhập không tồn tại!');
+            return;
+        }
+
+        var user = JSON.parse(userData);
+        if (user.password !== password) {
+            alert('Mật khẩu không đúng!');
+            return;
+        }
+// Khởi tạo dữ liệu xu nếu chưa có
+if (!localStorage.getItem('coins_' + username)) {
+    localStorage.setItem('coins_' + username, JSON.stringify({ official: 0, pending: 0 }));
+}
+
+        // Đăng nhập thành công
+        document.getElementById('authBox').classList.add('hidden');
+        document.getElementById('mainApp').classList.remove('hidden');
+
+        // Hiện menu "Quản lí" nếu user là admin
+        if (username === 'Ninjo27') {
+            document.getElementById('adminMenu').classList.remove('hidden');
+        } else {
+            document.getElementById('adminMenu').classList.add('hidden');
+        }
+    };
+     renderCoins(username); // <-- Thêm dòng này để cập nhật giao diện
     // Khởi tạo dữ liệu xu nếu chưa có
 if (!localStorage.getItem('coins_' + username)) {
     localStorage.setItem('coins_' + username, JSON.stringify({ official: 0, pending: 0 }));
 }
 // Hiển thị số xu ở góc trên phải
 updateCoinDisplay(username);
-    });
-  </script>
+</script>
 </body>
 </html>
-    
