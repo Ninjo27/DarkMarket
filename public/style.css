@@ -1,6 +1,0 @@
-@media (max-width: 480px) {
-  nav { flex-direction: column; }
-  .container { padding: 0 2px; }
-  .card-grid { grid-template-columns: 1fr; }
-  .admin-table, .admin-table th, .admin-table td { font-size: 0.95em; }
-}
