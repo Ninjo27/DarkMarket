@@ -152,6 +152,13 @@
             }
         }
     });
+    function updateCoinDisplay(username) {
+    var coinsData = localStorage.getItem('coins_' + username);
+    if (!coinsData) return;
+    var coins = JSON.parse(coinsData);
+    document.getElementById('coinAmount').textContent = coins.official;
+}
+
 function renderCoins(username) {
     var coinsData = localStorage.getItem('coins_' + username);
     if (!coinsData) return;
@@ -170,6 +177,7 @@ function renderCoins(username) {
             coins.pending = 0;
             localStorage.setItem('coins_' + username, JSON.stringify(coins));
             renderCoins(username);
+            updateCoinDisplay(username);  // Cập nhật số xu góc trên phải
             alert('Bạn đã nhận xu thành công!');
         } else {
             alert('Bạn không có xu đang duyệt để nhận!');
@@ -252,7 +260,8 @@ if (!localStorage.getItem('coins_' + username)) {
 if (!localStorage.getItem('coins_' + username)) {
     localStorage.setItem('coins_' + username, JSON.stringify({ official: 0, pending: 0 }));
 }
-
+// Hiển thị số xu ở góc trên phải
+updateCoinDisplay(username);
 </script>
 </body>
 </html>
