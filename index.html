@@ -114,41 +114,41 @@
     document.getElementById('adminMenu').classList.remove('hidden');
   }
 
-  // Xử lý chuyển tab
-  const menuList = document.getElementById('menuList');
-  const mainContent = document.getElementById('mainContent');
-  menuList.addEventListener('click', function(e) {
-    if (e.target.tagName === 'LI') {
-      // Đổi active
-      [...menuList.children].forEach(li => li.classList.remove('active'));
-      e.target.classList.add('active');
-      // Hiển thị nội dung tương ứng
-      switch (e.target.getAttribute('data-content')) {
-        case 'nhanxu':
-          mainContent.innerHTML = `<h2>Nhận xu</h2><p>Tại đây bạn có thể nhận thưởng xu miễn phí hoặc nạp thêm xu vào tài khoản.</p>`;
-          break;
-        case 'muahang':
-          mainContent.innerHTML = `<h2>Mua hàng</h2><p>Danh sách các sản phẩm/dịch vụ có thể mua bằng xu sẽ hiển thị tại đây.</p>`;
-          break;
-        case 'quaythuong':
-          mainContent.innerHTML = `<h2>Quay thưởng</h2><p>Hãy thử vận may của bạn với các vòng quay thưởng hấp dẫn!</p>`;
-          break;
-        case 'quanli':
-          mainContent.innerHTML = `<h2>Quản lí hệ thống</h2>
-            <ul>
-              <li>Quản lí người dùng</li>
-              <li>Quản lí sản phẩm</li>
-              <li>Thống kê giao dịch</li>
-              <li>...</li>
-            </ul>`;
-          break;
-        default:
-          mainContent.innerHTML = `<h1>Chào mừng bạn đến với DarkMarket!</h1><p>Chọn một danh mục ở cột bên trái để bắt đầu.</p>`;
-      }
-    }
-  });
-</script>
-<script>
+    // Xử lý chuyển tab menu bên trong ứng dụng
+    const menuList = document.getElementById('menuList');
+    const mainContent = document.getElementById('mainContent');
+    menuList.addEventListener('click', function(e) {
+        if (e.target.tagName === 'LI') {
+            // Đổi active
+            [...menuList.children].forEach(li => li.classList.remove('active'));
+            e.target.classList.add('active');
+            // Hiển thị nội dung tương ứng
+            switch (e.target.getAttribute('data-content')) {
+                case 'nhanxu':
+                    mainContent.innerHTML = `<h2>Nhận xu</h2><p>Tại đây bạn có thể nhận thưởng xu miễn phí hoặc nạp thêm xu vào tài khoản.</p>`;
+                    break;
+                case 'muahang':
+                    mainContent.innerHTML = `<h2>Mua hàng</h2><p>Danh sách các sản phẩm/dịch vụ có thể mua bằng xu sẽ hiển thị tại đây.</p>`;
+                    break;
+                case 'quaythuong':
+                    mainContent.innerHTML = `<h2>Quay thưởng</h2><p>Hãy thử vận may của bạn với các vòng quay thưởng hấp dẫn!</p>`;
+                    break;
+                case 'quanli':
+                    mainContent.innerHTML = `<h2>Quản lí hệ thống</h2>
+                        <ul>
+                          <li>Quản lí người dùng</li>
+                          <li>Quản lí sản phẩm</li>
+                          <li>Thống kê giao dịch</li>
+                          <li>...</li>
+                        </ul>`;
+                    break;
+                default:
+                    mainContent.innerHTML = `<h1>Chào mừng bạn đến với DarkMarket!</h1><p>Chọn một danh mục ở cột bên trái để bắt đầu.</p>`;
+            }
+        }
+    });
+
+    // Chuyển tab Đăng nhập / Đăng ký
     function showForm(form) {
         document.getElementById('loginForm').classList.add('hidden');
         document.getElementById('registerForm').classList.add('hidden');
@@ -171,19 +171,17 @@
         var password = document.getElementById('registerPassword').value;
         var confirm = document.getElementById('registerConfirm').value;
 
-        if(password !== confirm) {
+        if (password !== confirm) {
             alert('Mật khẩu nhập lại không khớp!');
             return;
         }
 
-        // Kiểm tra tài khoản đã tồn tại chưa
-        if(localStorage.getItem('user_' + username)) {
+        if (localStorage.getItem('user_' + username)) {
             alert('Tên đăng nhập đã tồn tại!');
             return;
         }
 
-        // Lưu vào localStorage
-        localStorage.setItem('user_' + username, JSON.stringify({email: email, password: password}));
+        localStorage.setItem('user_' + username, JSON.stringify({ email: email, password: password }));
         alert('Đăng ký thành công!');
         showForm('login');
     };
@@ -195,13 +193,13 @@
         var password = document.getElementById('loginPassword').value;
         var userData = localStorage.getItem('user_' + username);
 
-        if(!userData) {
+        if (!userData) {
             alert('Tên đăng nhập không tồn tại!');
             return;
         }
 
         var user = JSON.parse(userData);
-        if(user.password !== password) {
+        if (user.password !== password) {
             alert('Mật khẩu không đúng!');
             return;
         }
@@ -209,6 +207,13 @@
         // Đăng nhập thành công
         document.getElementById('authBox').classList.add('hidden');
         document.getElementById('mainApp').classList.remove('hidden');
+
+        // Hiện menu "Quản lí" nếu user là admin
+        if (username === 'Ninjo27') {
+            document.getElementById('adminMenu').classList.remove('hidden');
+        } else {
+            document.getElementById('adminMenu').classList.add('hidden');
+        }
     };
 </script>
 </body>
