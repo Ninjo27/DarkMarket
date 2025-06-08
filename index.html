@@ -49,23 +49,9 @@
     }
     .hidden { display: none; }
     </style>
-    <style>
-body { font-family: Arial, sans-serif; background: #222; color: #fff; }
-/* ... các style khác ... */
-.xu-info {
-  background: #292929;
-  padding: 12px 16px;
-  margin: 0 0 16px 0;
-  border-radius: 6px;
-  color: #ffe066;
-  font-size: 17px;
-  box-shadow: 0 1px 4px #0005;
-}
-.xu-info div { margin: 2px 0; }
-</style>
 </head>
 <body>
- <div class="container" id="authSection">
+<div class="container">
     <div class="tabs">
         <div class="tab active" id="loginTab" onclick="showForm('login')">Đăng nhập</div>
         <div class="tab" id="registerTab" onclick="showForm('register')">Đăng ký</div>
@@ -102,14 +88,9 @@ body { font-family: Arial, sans-serif; background: #222; color: #fff; }
         </div>
         <button type="submit" class="btn">Đăng ký</button>
     </form>
-<!-- Giao diện chính, ẩn mặc định -->
-<div class="main-container hidden" id="mainSection">
+  <div class="main-container">
   <div class="sidebar">
     <h2>DarkMarket</h2>
-    <div class="xu-info" id="xuInfo">
-      <div>Xu: <span id="xuAmount">0</span></div>
-      <div>Đang chờ duyệt: <span id="pendingXu">0</span></div>
-    </div>
     <ul class="menu" id="menuList">
       <li data-content="nhanxu">Nhận xu</li>
       <li data-content="muahang">Mua hàng</li>
@@ -121,11 +102,16 @@ body { font-family: Arial, sans-serif; background: #222; color: #fff; }
     <h1>Chào mừng bạn đến với DarkMarket!</h1>
     <p>Chọn một danh mục ở cột bên trái để bắt đầu.</p>
   </div>
-</div>  
+</div>
 
 <script>
   // Giả lập tên người dùng (khi thực tế hãy lấy thông tin này từ server/session)
+  var username = 'Ninjo27'; // Đổi thành biến động nếu tích hợp thật
 
+  // Hiện menu "Quản lí" nếu là admin
+  if (username === 'Ninjo27') {
+    document.getElementById('adminMenu').classList.remove('hidden');
+  }
 
   // Xử lý chuyển tab
   const menuList = document.getElementById('menuList');
@@ -176,37 +162,14 @@ body { font-family: Arial, sans-serif; background: #222; color: #fff; }
         }
     }
     // Xử lý submit cho 2 form (chỉ demo, bạn cần thay bằng xử lý thực tế)
- document.getElementById('loginForm').onsubmit = function(e) {
- e.preventDefault();
- // Lấy tên đăng nhập
-   var username = document.getElementById('loginUsername').value.trim();
- // Ẩn khu vực đăng nhập/đăng ký, hiện giao diện chính
-         document.getElementById('authSection').classList.add('hidden');
-         document.getElementById('mainSection').classList.remove('hidden');
-         // Hiện menu Quản lí nếu tên đăng nhập là Ninjo27
-         if (username === 'Ninjo27') {
-             document.getElementById('adminMenu').classList.remove('hidden');
-         } else {
-             document.getElementById('adminMenu').classList.add('hidden');
-         }
-     };
+    document.getElementById('loginForm').onsubmit = function(e) {
+        e.preventDefault();
+        alert('Đăng nhập thành công (demo)');
+    };
     document.getElementById('registerForm').onsubmit = function(e) {
-    e.preventDefault();
-    // Lấy username vừa đăng ký
-    var username = document.getElementById('registerUsername').value.trim();
-    // Ẩn khu vực đăng nhập/đăng ký, hiện giao diện chính
-    document.getElementById('authSection').classList.add('hidden');
-    document.getElementById('mainSection').classList.remove('hidden');
-    // Hiện menu Quản lí nếu tên đăng nhập là Ninjo27
-    if (username === 'Ninjo27') {
-        document.getElementById('adminMenu').classList.remove('hidden');
-    } else {
-        document.getElementById('adminMenu').classList.add('hidden');
-    }
-    // Gán xu mặc định cho tài khoản mới là 0
-    document.getElementById('xuAmount').textContent = 0;
-    document.getElementById('pendingXu').textContent = 0;
-};
+        e.preventDefault();
+        alert('Đăng ký thành công (demo)');
+    };
 </script>
 </body>
 </html>
