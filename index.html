@@ -312,23 +312,38 @@ function duyetXu(name, xuChoDuyet) {
         showForm('login');
     };
 
-    // Đăng nhập
-    document.getElementById('loginForm').onsubmit = function(e) {
-        e.preventDefault();
-        var username = document.getElementById('loginUsername').value;
-        var password = document.getElementById('loginPassword').value;
-        var userData = localStorage.getItem('user_' + username);
+    const scriptURL = 'https://script.google.com/macros/s/AKfycb.../exec'; // thay bằng URL thật
 
-        if (!userData) {
-            alert('Tên đăng nhập không tồn tại!');
-            return;
-        }
+function handleLogin() {
+  const username = document.getElementById("login-username").value;
+  const password = document.getElementById("login-password").value;
 
-        var user = JSON.parse(userData);
-        if (user.password !== password) {
-            alert('Mật khẩu không đúng!');
-            return;
-        }
+  fetch(`${scriptURL}?action=login&username=${username}&password=${password}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === "OK") {
+        localStorage.setItem("username", username);
+        document.getElementById("coins").textContent = data.coins;
+        document.getElementById("pending").textContent = data.pending;
+        alert("Đăng nhập thành công!");
+      } else {
+        alert("Sai tài khoản hoặc mật khẩu!");
+      }
+    });
+}
+
+function updateBalanceDisplay() {
+  const username = localStorage.getItem("username");
+  if (!username) return;
+
+  fetch(`${scriptURL}?action=get_user&username=${username}`)
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("coins").textContent = data.coins;
+      document.getElementById("pending").textContent = data.pending;
+    });
+}
+
 // Khởi tạo dữ liệu xu nếu chưa có
 if (!localStorage.getItem('coins_' + username)) {
     localStorage.setItem('coins_' + username, JSON.stringify({ official: 0, pending: 0 }));
