@@ -131,8 +131,40 @@
             // Hiển thị nội dung tương ứng
             switch (e.target.getAttribute('data-content')) {
                 case 'nhanxu':
-                    mainContent.innerHTML = `<h2>Nhận xu</h2><p>Tại đây bạn có thể nhận thưởng xu miễn phí hoặc nạp thêm xu vào tài khoản.</p>`;
-                    break;
+    mainContent.innerHTML = `
+        <h2>Nhận xu</h2>
+        <p>Tại đây bạn có thể nhận thưởng xu miễn phí hoặc nạp thêm xu vào tài khoản.</p>
+        <button id="watchAdBtn" class="btn">Xem quảng cáo nhận 1 xu</button>
+        <div style="margin-top: 20px;">
+            <p><strong>Xu chính thức:</strong> <span id="xu">${getCoins().official}</span></p>
+            <p><strong>Xu đang duyệt:</strong> <span id="xuDangDuyet">${getCoins().pending}</span></p>
+    <button id="nhanXuBtn" class="btn">Nhận xu đang duyệt</button>
+    <button id="xemQuangCaoBtn" class="btn" style="margin-top:10px; background: #28a745;">Xem quảng cáo</button>
+`;
+        </div>
+    `;
+
+    document.getElementById('watchAdBtn').onclick = function() {
+        watchAdAndAddCoin();
+    };
+
+    document.getElementById('nhanXuBtn').onclick = function() {
+        var coins = getCoins();
+        if (coins.pending > 0) {
+            coins.official += coins.pending;
+            coins.pending = 0;
+            saveCoins(coins);
+            alert('Bạn đã nhận xu thành công!');
+            // Cập nhật lại UI
+            document.getElementById('xu').textContent = coins.official;
+            document.getElementById('xuDangDuyet').textContent = coins.pending;
+            updateCoinDisplay(username);
+        } else {
+            alert('Bạn không có xu đang duyệt để nhận!');
+        }
+    };
+    break;
+
                 case 'muahang':
                     mainContent.innerHTML = `<h2>Mua hàng</h2><p>Danh sách các sản phẩm/dịch vụ có thể mua bằng xu sẽ hiển thị tại đây.</p>`;
                     break;
@@ -174,18 +206,15 @@ function renderCoins(username) {
         <button id="nhanXuBtn" class="btn">Nhận xu đang duyệt</button>
     `;
 
-    document.getElementById('nhanXuBtn').onclick = function() {
-        if (coins.pending > 0) {
-            coins.official += coins.pending;
-            coins.pending = 0;
-            localStorage.setItem('coins_' + username, JSON.stringify(coins));
-            renderCoins(username);
-            updateCoinDisplay(username);  // Cập nhật số xu góc trên phải
-            alert('Bạn đã nhận xu thành công!');
-        } else {
-            alert('Bạn không có xu đang duyệt để nhận!');
-        }
-    };
+    document.getElementById('xemQuangCaoBtn').onclick = function() {
+    // Ví dụ cộng thêm 10 xu vào đang duyệt
+    coins.pending += 10;
+    localStorage.setItem('coins_' + username, JSON.stringify(coins));
+    renderCoins(username);
+    updateCoinDisplay(username);
+    alert('Bạn đã nhận được 10 xu đang duyệt sau khi xem quảng cáo!');
+};
+
 }
 
     // Chuyển tab Đăng nhập / Đăng ký
