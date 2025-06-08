@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-<title>DarkMarket - Giao diện chính</title>
+    <title>DarkMarket - Giao diện chính</title>
     <style>
         body { font-family: Arial, sans-serif; background: #222; color: #fff; }
         .container { width: 350px; margin: 80px auto; background: #333; padding: 30px 20px; border-radius: 10px; box-shadow: 0 0 10px #000a; }
@@ -28,30 +28,30 @@
         }
         .btn:hover { background: #0056b3; }
         .hidden { display: none; }
-          body { margin:0; font-family: Arial, sans-serif; background: #222; color: #eee; }
-    .main-container { display: flex; min-height: 100vh; }
-    .sidebar {
-      width: 220px; background: #181818; padding: 30px 0 0 0;
-      display: flex; flex-direction: column; min-height: 100vh; box-shadow: 2px 0 8px #000a;
-    }
-    .sidebar h2 { color: #fff; text-align: center; margin-bottom: 32px; }
-    .menu {
-      list-style: none; padding: 0; margin: 0;
-      flex: 1;
-    }
-    .menu li {
-      padding: 15px 32px; cursor: pointer; transition: background 0.2s;
-      font-size: 18px; color: #ccc;
-    }
-    .menu li:hover, .menu li.active { background: #333; color: #fff; }
-    .content {
-      flex: 1; padding: 40px; background: #292929;
-    }
-    .hidden { display: none; }
+        body { margin:0; font-family: Arial, sans-serif; background: #222; color: #eee; }
+        .main-container { display: flex; min-height: 100vh; }
+        .sidebar {
+          width: 220px; background: #181818; padding: 30px 0 0 0;
+          display: flex; flex-direction: column; min-height: 100vh; box-shadow: 2px 0 8px #000a;
+        }
+        .sidebar h2 { color: #fff; text-align: center; margin-bottom: 32px; }
+        .menu {
+          list-style: none; padding: 0; margin: 0;
+          flex: 1;
+        }
+        .menu li {
+          padding: 15px 32px; cursor: pointer; transition: background 0.2s;
+          font-size: 18px; color: #ccc;
+        }
+        .menu li:hover, .menu li.active { background: #333; color: #fff; }
+        .content {
+          flex: 1; padding: 40px; background: #292929;
+        }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
-<div class="container">
+<div class="container" id="authBox">
     <div class="tabs">
         <div class="tab active" id="loginTab" onclick="showForm('login')">Đăng nhập</div>
         <div class="tab" id="registerTab" onclick="showForm('register')">Đăng ký</div>
@@ -88,20 +88,21 @@
         </div>
         <button type="submit" class="btn">Đăng ký</button>
     </form>
-  <div class="main-container">
-  <div class="sidebar">
-    <h2>DarkMarket</h2>
-    <ul class="menu" id="menuList">
-      <li data-content="nhanxu">Nhận xu</li>
-      <li data-content="muahang">Mua hàng</li>
-      <li data-content="quaythuong">Quay thưởng</li>
-      <li data-content="quanli" id="adminMenu" class="hidden">Quản lí</li>
-    </ul>
-  </div>
-  <div class="content" id="mainContent">
-    <h1>Chào mừng bạn đến với DarkMarket!</h1>
-    <p>Chọn một danh mục ở cột bên trái để bắt đầu.</p>
-  </div>
+</div>
+<div class="main-container hidden" id="mainApp">
+    <div class="sidebar">
+        <h2>DarkMarket</h2>
+        <ul class="menu" id="menuList">
+            <li data-content="nhanxu">Nhận xu</li>
+            <li data-content="muahang">Mua hàng</li>
+            <li data-content="quaythuong">Quay thưởng</li>
+            <li data-content="quanli" id="adminMenu" class="hidden">Quản lí</li>
+        </ul>
+    </div>
+    <div class="content" id="mainContent">
+        <h1>Chào mừng bạn đến với DarkMarket!</h1>
+        <p>Chọn một danh mục ở cột bên trái để bắt đầu.</p>
+    </div>
 </div>
 
 <script>
@@ -146,7 +147,7 @@
       }
     }
   });
-</div>
+</script>
 <script>
     function showForm(form) {
         document.getElementById('loginForm').classList.add('hidden');
@@ -161,14 +162,17 @@
             document.getElementById('registerTab').classList.add('active');
         }
     }
-    // Xử lý submit cho 2 form (chỉ demo, bạn cần thay bằng xử lý thực tế)
+    // Xử lý submit cho 2 form (update mới):
     document.getElementById('loginForm').onsubmit = function(e) {
         e.preventDefault();
-        alert('Đăng nhập thành công (demo)');
+        // Ẩn form đăng nhập/đăng ký, hiện giao diện chính
+        document.getElementById('authBox').classList.add('hidden');
+        document.getElementById('mainApp').classList.remove('hidden');
     };
     document.getElementById('registerForm').onsubmit = function(e) {
         e.preventDefault();
         alert('Đăng ký thành công (demo)');
+        showForm('login');
     };
 </script>
 </body>
